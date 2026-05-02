@@ -8,6 +8,17 @@
 }
 
 @layer base {
+  /* ───────────────────────────────────────────
+     PWA / Mobile-first resets
+  ─────────────────────────────────────────── */
+  html {
+    /* Prevent iOS rubber-band overscroll on the html element */
+    overscroll-behavior: none;
+    /* Smooth rendering */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
   body {
     background-color: #f8fafc;
     color: #0f172a;
@@ -15,13 +26,38 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.3s ease, color 0.3s ease;
+
+    /* Native-feel: prevent tap highlight on mobile */
+    -webkit-tap-highlight-color: transparent;
+
+    /* Prevent text selection on UI elements */
+    -webkit-user-select: none;
+    user-select: none;
+
+    /* Prevent overscroll bounce on body (iOS PWA) */
+    overscroll-behavior: none;
+
+    /* Safe area padding for notched phones (iPhone X+, Android hole-punch) */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
+
   .dark body {
     background-color: var(--color-dark);
     color: #f8fafc;
   }
-  
-  /* Custom scrollbar */
+
+  /* Allow text selection in inputs/textareas */
+  input, textarea, [contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  /* ───────────────────────────────────────────
+     Custom scrollbar (desktop-only)
+  ─────────────────────────────────────────── */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -39,5 +75,97 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
   }
-}
 
+  /* ───────────────────────────────────────────
+     Touch / Pointer improvements
+  ─────────────────────────────────────────── */
+  button, a, [role="button"] {
+    /* Faster touch response on mobile */
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+
+  /* Momentum scrolling for scroll containers */
+  .scroll-momentum {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+  }
+
+  /* ───────────────────────────────────────────
+     PWA standalone mode adjustments
+  ─────────────────────────────────────────── */
+  @media (display-mode: standalone) {
+    /* Remove browser chrome spacing in standalone mode */
+    body {
+      /* Status bar space is handled by safe-area-inset */
+    }
+
+    /* Prevent pull-to-refresh in standalone PWA */
+    body {
+      overscroll-behavior-y: contain;
+    }
+  }
+
+  /* ───────────────────────────────────────────
+     Page transition container
+  ─────────────────────────────────────────── */
+  #root {
+    min-height: 100dvh; /* Dynamic viewport height — handles mobile browser chrome */
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ───────────────────────────────────────────
+     Android-style ripple effect for buttons
+  ─────────────────────────────────────────── */
+  .ripple {
+    position: relative;
+    overflow: hidden;
+  }
+  .ripple::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .ripple:active::after {
+    opacity: 1;
+    transition: opacity 0s;
+  }
+
+  /* ───────────────────────────────────────────
+     Loading skeleton animation
+  ─────────────────────────────────────────── */
+  @keyframes skeleton-shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(99,102,241,0.05) 25%,
+      rgba(99,102,241,0.15) 50%,
+      rgba(99,102,241,0.05) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+    border-radius: 8px;
+  }
+
+  /* ───────────────────────────────────────────
+     Mobile viewport fix (dvh support)
+  ─────────────────────────────────────────── */
+  @supports (height: 100dvh) {
+    #root {
+      min-height: 100dvh;
+    }
+  }
+  @supports not (height: 100dvh) {
+    #root {
+      min-height: 100vh;
+    }
+  }
+}

@@ -5,7 +5,9 @@ import './index.css'
 import { ThemeProvider } from './context/ThemeContext.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const root = ReactDOM.createRoot(document.getElementById('root'))
+
+root.render(
   <React.StrictMode>
     <ThemeProvider>
       <AuthProvider>
@@ -14,3 +16,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </ThemeProvider>
   </React.StrictMode>,
 )
+
+// Dismiss splash screen after React mounts and first paint completes
+if (typeof window.__hideSplash === 'function') {
+  // Use requestAnimationFrame to ensure first paint is done
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      window.__hideSplash()
+    })
+  })
+}

@@ -2,12 +2,160 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+
+    <!-- Primary Meta Tags -->
+    <title>ExpenseIQ – AI Expense Tracker</title>
+    <meta name="title" content="ExpenseIQ – AI Expense Tracker" />
+    <meta name="description" content="AI-powered expense tracking and analytics. Upload receipts, manage budgets, and get intelligent financial insights." />
+    <meta name="author" content="ExpenseIQ" />
+    <meta name="keywords" content="expense tracker, budget, finance, AI, OCR, receipt scanner" />
+
+    <!-- PWA / Web App Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Theme Color (matches app branding — syncs with Android status bar) -->
+    <meta name="theme-color" content="#6366F1" />
+    <meta name="msapplication-TileColor" content="#070913" />
+    <meta name="msapplication-TileImage" content="/icon-144.png" />
+
+    <!-- iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ExpenseIQ" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- iOS Splash Screens (iPhone sizes) -->
+    <link rel="apple-touch-startup-image" href="/icon-512.png" />
+
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/icon-152.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/icon-144.png" />
+    <link rel="apple-touch-icon" sizes="128x128" href="/icon-128.png" />
+    <link rel="apple-touch-icon" sizes="96x96" href="/icon-96.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/icon-72.png" />
+
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>client</title>
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="shortcut icon" href="/icon-192.png" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ExpenseIQ – AI Expense Tracker" />
+    <meta property="og:description" content="AI-powered expense tracking and analytics. Upload receipts and get intelligent insights." />
+    <meta property="og:image" content="/icon-512.png" />
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- Prevent flash of unstyled content — instant dark background -->
+    <style>
+      :root { color-scheme: dark light; }
+      html, body { margin: 0; padding: 0; background: #070913; }
+      /* Safe-area support for notched phones */
+      body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+      }
+      /* Full-screen splash loading state */
+      #splash-screen {
+        position: fixed;
+        inset: 0;
+        background: #070913;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+      }
+      #splash-screen.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .splash-logo {
+        width: 100px;
+        height: 100px;
+        border-radius: 22px;
+        animation: splashPulse 1.5s ease-in-out infinite;
+        box-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+      }
+      .splash-title {
+        margin-top: 20px;
+        font-family: 'Inter', sans-serif;
+        font-size: 28px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #6366F1, #8B5CF6, #10B981);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.5px;
+      }
+      .splash-subtitle {
+        margin-top: 6px;
+        font-family: 'Inter', sans-serif;
+        font-size: 13px;
+        color: rgba(255,255,255,0.4);
+        letter-spacing: 0.5px;
+      }
+      .splash-loader {
+        margin-top: 40px;
+        width: 40px;
+        height: 4px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .splash-loader-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #6366F1, #10B981);
+        border-radius: 2px;
+        animation: splashLoad 1.2s ease-in-out forwards;
+      }
+      @keyframes splashPulse {
+        0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(99,102,241,0.4); }
+        50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(99,102,241,0.7); }
+      }
+      @keyframes splashLoad {
+        0% { width: 0%; }
+        60% { width: 80%; }
+        100% { width: 100%; }
+      }
+    </style>
   </head>
   <body>
+    <!-- Native-feel splash screen (shows before React loads) -->
+    <div id="splash-screen">
+      <img src="/icon-192.png" alt="ExpenseIQ" class="splash-logo" />
+      <div class="splash-title">ExpenseIQ</div>
+      <div class="splash-subtitle">AI-Powered Expense Tracker</div>
+      <div class="splash-loader">
+        <div class="splash-loader-bar"></div>
+      </div>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Dismiss splash screen once React mounts -->
+    <script>
+      window.__hideSplash = function() {
+        var splash = document.getElementById('splash-screen');
+        if (splash) {
+          setTimeout(function() {
+            splash.classList.add('hidden');
+            setTimeout(function() { splash.remove(); }, 600);
+          }, 300);
+        }
+      };
+    </script>
   </body>
 </html>
