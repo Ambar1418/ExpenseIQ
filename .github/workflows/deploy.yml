@@ -42,6 +42,8 @@ jobs:
         env:
           # Base path must match GitHub Pages repo subdirectory
           VITE_BASE_URL: /ExpenseIQ/
+          # Backend API URL (Render deployment)
+          VITE_API_URL: https://expenseiq-track.onrender.com/api
 
       - name: Add 404.html for SPA routing
         working-directory: ./client/dist
