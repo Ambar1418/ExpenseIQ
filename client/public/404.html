@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>ExpenseIQ</title>
+    <script>
+      // Single Page App GitHub Pages redirect trick
+      // When GitHub Pages serves a 404 (for any route like /dashboard),
+      // it falls back to this 404.html which redirects to index.html
+      // with the path encoded as a query param, then index.html restores it.
+      var pathSegmentsToKeep = 1; // 1 = keep /ExpenseIQ in the path
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') +
+        '/?/' + l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    </script>
+  </head>
+  <body></body>
+</html>

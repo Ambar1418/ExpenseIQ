@@ -148,8 +148,11 @@ function PageWrapper({ children }) {
 }
 
 function App() {
+  // import.meta.env.BASE_URL resolves to '/ExpenseIQ/' in prod, '/' in dev
+  const basename = import.meta.env.BASE_URL;
+
   return (
-    <Router>
+    <Router basename={basename}>
       <Toaster
         position="top-center"
         toastOptions={{
