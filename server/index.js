@@ -27,6 +27,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
   'https://ambar1418.github.io',
+  'https://expenseiq-vite-3r2y.onrender.com',
   process.env.CLIENT_URL,
 ].filter(Boolean);
 
