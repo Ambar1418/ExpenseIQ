@@ -22,18 +22,41 @@ connectDB();
 
 const app = express();
 
+// Allowed frontend origins
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://ambar1418.github.io',
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
 // Middleware
 app.use(express.json());
+
+// CORS — must come BEFORE helmet
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'https://ambar1418.github.io',
-    process.env.CLIENT_URL,
-  ].filter(Boolean),
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    // Also allow any *.onrender.com origin (for Render deployments)
+    if (origin.endsWith('.onrender.com')) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
 }));
-app.use(helmet());
+
+// Helmet — configure to NOT block cross-origin API requests
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
+  crossOriginOpenerPolicy: { policy: 'unsafe-none' },
+  contentSecurityPolicy: false, // Disable CSP for API server
+}));
+
 app.use(morgan('dev'));
 
 // Define Routes
