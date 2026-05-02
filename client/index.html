@@ -130,19 +130,6 @@
         100% { width: 100%; }
       }
     </style>
-    <!-- GitHub Pages SPA routing fix: restore path from query param -->
-    <script>
-      (function(l) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) {
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-          window.history.replaceState(null, null,
-            l.pathname.slice(0, -1) + decoded + l.hash
-          );
-        }
-      }(window.location))
-    </script>
   </head>
   <body>
     <!-- Native-feel splash screen (shows before React loads) -->
