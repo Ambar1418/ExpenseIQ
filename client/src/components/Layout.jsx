@@ -17,7 +17,7 @@ const Layout = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-dark text-slate-800 dark:text-slate-100 font-sans transition-colors duration-300 pb-20 md:pb-0 overflow-x-hidden">
+    <div className="flex min-h-screen bg-[#0A0F1C] text-slate-100 font-sans transition-colors duration-300 pb-20 md:pb-0 overflow-x-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0 min-h-screen">
         <TopBar />
@@ -34,7 +34,7 @@ const Layout = () => {
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 h-18 bg-white/80 dark:bg-[#0A0F1C]/80 border-t border-slate-200/60 dark:border-slate-800/60 flex justify-around items-center px-2 z-50 md:hidden backdrop-blur-md">
+      <nav className="fixed bottom-0 left-0 right-0 h-18 bg-[#0A0F1C]/90 border-t border-slate-800/60 flex justify-around items-center px-2 z-50 md:hidden backdrop-blur-md">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
@@ -43,11 +43,11 @@ const Layout = () => {
               to={item.path}
               className={`flex flex-col items-center justify-center w-full h-full text-[10px] sm:text-xs transition-all duration-200
                 ${isActive 
-                  ? 'text-indigo-600 dark:text-indigo-400 font-semibold' 
-                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                  ? 'text-indigo-400 font-semibold' 
+                  : 'text-slate-400 hover:text-slate-200'
                 }`}
             >
-              <div className={`p-2 rounded-xl transition-all duration-200 ${isActive ? 'bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 scale-105' : 'hover:bg-slate-100 dark:hover:bg-slate-800/40'}`}>
+              <div className={`p-2 rounded-xl transition-all duration-200 ${isActive ? 'bg-indigo-900/40 text-indigo-400 scale-105' : 'hover:bg-slate-800/40'}`}>
                 {item.icon}
               </div>
               <span className="mt-0.5 transform scale-95 font-medium">{item.name}</span>
